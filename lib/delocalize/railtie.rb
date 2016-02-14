@@ -1,4 +1,18 @@
 module Delocalize
+  module DelocalizableParameters
+    extend ActiveSupport::Concern
+
+    def params
+      @_params ||= Parameters.new(request.parameters)
+    end
+
+    def params=(val)
+      @_params = val.is_a?(Hash) ? Parameters.new(val) : val
+    end
+  end
+end
+
+module Delocalize
   class Railtie < Rails::Railtie
     initializer "delocalize" do |app|
       ActiveSupport.on_load :action_controller do
